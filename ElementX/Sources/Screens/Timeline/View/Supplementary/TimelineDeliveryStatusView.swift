@@ -16,28 +16,27 @@ struct TimelineDeliveryStatusView: View {
     }
 
     let deliveryStatus: Status
-
-    private var icon: CompoundIcon {
-        switch deliveryStatus {
-        case .sending:
-            return CompoundIcon(\.circle, size: .xSmall, relativeTo: .compound.bodyMD)
-        case .sent:
-            return CompoundIcon(\.checkCircle, size: .xSmall, relativeTo: .compound.bodyMD)
-        }
-    }
     
     var body: some View {
-        icon
-            .foregroundColor(.compound.iconSecondary)
-            .accessibilityLabel(accessibilityLabel)
-    }
-    
-    private var accessibilityLabel: String {
+        // Flox: Telegram-style checkmarks
         switch deliveryStatus {
         case .sending:
-            return L10n.commonSending
+            Image(systemName: "checkmark")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundColor(.compound.iconSecondary)
+                .accessibilityLabel(L10n.commonSending)
         case .sent:
-            return L10n.commonSent
+            // Double checkmark like Telegram "delivered/read"
+            Image(systemName: "checkmark")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundColor(.compound.iconAccentTertiary)
+                .overlay(alignment: .trailing) {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(.compound.iconAccentTertiary)
+                        .offset(x: 4)
+                }
+                .accessibilityLabel(L10n.commonSent)
         }
     }
 }
