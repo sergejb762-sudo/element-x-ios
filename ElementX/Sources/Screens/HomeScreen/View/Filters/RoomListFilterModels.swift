@@ -23,8 +23,9 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     case invites
     case lowPriority
     
+    // Flox: hide favourites filter (Telegram doesn't have favourites)
     static var availableFilters: [RoomListFilter] {
-        RoomListFilter.allCases
+        RoomListFilter.allCases.filter { $0 != .favourites }
     }
     
     var localizedName: String {
