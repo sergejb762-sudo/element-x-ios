@@ -30,31 +30,84 @@ private struct TimelineItemBubbleBackgroundModifier: ViewModifier {
     let insets: EdgeInsets
     var color: Color?
     
+    // Flox: Telegram-style larger corner radius
+    private let cornerRadius: CGFloat = 18
+    private let tailCornerRadius: CGFloat = 4
+    
+    private var showTail: Bool {
+        timelineGroupStyle == .single || timelineGroupStyle == .last
+    }
+    
     func body(content: Content) -> some View {
         content
             .padding(insets)
             .background(color)
-            .cornerRadius(12, corners: roundedCorners)
+            .cornerRadius(cornerRadius, corners: roundedCorners)
+            .overlay(alignment: isOutgoing ? .bottomTrailing : .bottomLeading) {
+                // Flox: Telegram-style tail on last/single messages
+                if showTail, let color {
+                    BubbleTailShape(isOutgoing: isOutgoing)
+                        .fill(color)
+                        .frame(width: 10, height: 16)
+                        .offset(x: isOutgoing ? 6 : -6, y: -1)
+                }
+            }
     }
     
     private var roundedCorners: UIRectCorner {
+        // Flox: Telegram-style corner rounding
         switch timelineGroupStyle {
         case .single:
-            return .allCorners
-        case .first:
             if isOutgoing {
                 return [.topLeft, .topRight, .bottomLeft]
             } else {
                 return [.topLeft, .topRight, .bottomRight]
             }
+        case .first:
+            return [.topLeft, .topRight, .bottomLeft, .bottomRight]
         case .middle:
-            return isOutgoing ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight]
+            return .allCorners
         case .last:
             if isOutgoing {
-                return [.topLeft, .bottomLeft, .bottomRight]
+                return [.topLeft, .topRight, .bottomLeft]
             } else {
-                return [.topRight, .bottomLeft, .bottomRight]
+                return [.topLeft, .topRight, .bottomRight]
             }
         }
     }
+}
+
+/// A small triangular tail shape for message bubbles (Telegram-style).
+private struct BubbleTailShape: Shape {
+    let isOutgoing: Bool
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        if isOutgoing {
+            // Tail pointing bottom-right
+            path.move(to: CGPoint(x: 0, y: 0))
+            path.addLine(to: CGPoint(x: rect.width, y: rect.height * 0.7))
+            path.addQuadCurve(to: CGPoint(x: rect.width * 0.3, y: rect.height),
+                              control: CGPoint(x: rect.width, y: rect.height))
+            path.addLine(to: CGPoint(x: 0, y: rect.height))
+            path.closeSubpath()
+        } else {
+            // Tail pointing bottom-left
+            path.move(to: CGPoint(x: rect.width, y: 0))
+            path.addLine(to: CGPoint(x: 0, y: rect.height * 0.7))
+            path.addQuadCurve(to: CGPoint(x: rect.width * 0.7, y: rect.height),
+                              control: CGPoint(x: 0, y: rect.height))
+            path.addLine(to: CGPoint(x: rect.width, y: rect.height))
+            path.closeSubpath()
+        }
+        return path
+    }
+}
+
+private extension EdgeInsets {
+    init(around: CGFloat) {
+        self.init(top: around, leading: around, bottom: around, trailing: around)
+    }
+
+    static var zero: Self = .init(around: 0)
 }
