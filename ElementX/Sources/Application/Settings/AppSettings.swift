@@ -192,25 +192,25 @@ final class AppSettings {
     ///
     /// Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
     /// match the last part of the user ID. For example `example.com` and not `https://matrix.example.com`.
-    private(set) var accountProviders = ["matrix.org"]
+    private(set) var accountProviders = ["flox.su"]
     /// Whether or not the user is allowed to manually enter their own account provider or must select from one of `defaultAccountProviders`.
-    private(set) var allowOtherAccountProviders = true
+    private(set) var allowOtherAccountProviders = false
     /// Whether the components surrounding the app brand/logo should be hidden or not
     private(set) var hideBrandChrome = false
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
-    let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
+    let backgroundAppRefreshTaskIdentifier = "su.flox.messenger.background.refresh"
 
     /// A URL where users can go read more about the app.
-    private(set) var websiteURL: URL = "https://element.io"
+    private(set) var websiteURL: URL = "https://flox.su"
     /// A URL that contains the app's logo that may be used when showing content in a web view.
-    private(set) var logoURL: URL = "https://element.io/mobile-icon.png"
+    private(set) var logoURL: URL = "https://flox.su/icon.png"
     /// A URL that contains that app's copyright notice.
-    private(set) var copyrightURL: URL = "https://element.io/copyright"
+    private(set) var copyrightURL: URL = "https://flox.su/copyright"
     /// A URL that contains the app's Terms of use.
-    private(set) var acceptableUseURL: URL = "https://element.io/acceptable-use-policy-terms"
+    private(set) var acceptableUseURL: URL = "https://flox.su/terms"
     /// A URL that contains the app's Privacy Policy.
-    private(set) var privacyURL: URL = "https://element.io/privacy"
+    private(set) var privacyURL: URL = "https://flox.su/privacy"
     /// A URL where users can go read more about encryption in general.
     private(set) var encryptionURL: URL = "https://element.io/help#encryption"
     /// A URL where users can go read more about device verification..
@@ -275,7 +275,7 @@ final class AppSettings {
         #endif
     }
     
-    private(set) var pushGatewayBaseURL: URL = "https://matrix.org"
+    private(set) var pushGatewayBaseURL: URL = "https://matrix.flox.su"
     var pushGatewayNotifyEndpoint: URL {
         pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify")
     }
@@ -311,17 +311,17 @@ final class AppSettings {
     // MARK: - Bug report
     
     let bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> = .init(Secrets.rageshakeURL.map { .url(URL(string: $0)!) } ?? .disabled) // swiftlint:disable:this force_unwrapping
-    let bugReportSentryURL: URL? = Secrets.sentryDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
-    let bugReportSentryRustURL: URL? = Secrets.sentryRustDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
+    let bugReportSentryURL: URL? = nil  // Flox: Sentry disabled
+    let bugReportSentryRustURL: URL? = nil  // Flox: Sentry disabled
     /// The name allocated by the bug report server
-    private(set) var bugReportApplicationID = "element-x-ios"
+    private(set) var bugReportApplicationID = "flox-ios"
     
     // MARK: - Analytics
     
     /// The configuration to use for analytics. Set to `nil` to disable analytics.
-    let analyticsConfiguration: AnalyticsConfiguration? = AppSettings.makeAnalyticsConfiguration()
+    let analyticsConfiguration: AnalyticsConfiguration? = nil  // Flox: analytics disabled
     /// The URL to open with more information about analytics terms. When this is `nil` the "Learn more" link will be hidden.
-    private(set) var analyticsTermsURL: URL? = "https://element.io/cookie-policy"
+    private(set) var analyticsTermsURL: URL? = nil  // Flox: analytics disabled
     /// Whether or not there the app is able ask for user consent to enable analytics or sentry reporting.
     var canPromptForAnalytics: Bool {
         analyticsConfiguration != nil || bugReportSentryURL != nil
@@ -336,10 +336,10 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
     var analyticsConsentState
     
-    @UserPreference(key: UserDefaultsKeys.hasRunNotificationPermissionsOnboarding, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.hasRunNotificationPermissionsOnboarding, defaultValue: true, storageType: .userDefaults(store))
     var hasRunNotificationPermissionsOnboarding
     
-    @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: true, storageType: .userDefaults(store))
     var hasRunIdentityConfirmationOnboarding
     
     @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
