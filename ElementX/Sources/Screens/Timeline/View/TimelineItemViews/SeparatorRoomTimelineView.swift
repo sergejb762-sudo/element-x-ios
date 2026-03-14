@@ -12,13 +12,19 @@ struct SeparatorRoomTimelineView: View {
     let timelineItem: SeparatorRoomTimelineItem
     
     var body: some View {
+        // Flox: Telegram-style floating date capsule
         Text(timelineItem.timestamp.formattedDateSeparator())
-            .font(.compound.bodySMSemibold)
-            .foregroundColor(.compound.textPrimary)
+            .font(.compound.bodyXSSemibold)
+            .foregroundColor(.white)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(
+                Capsule()
+                    .fill(Color.black.opacity(0.35))
+            )
             .frame(maxWidth: .infinity)
             .multilineTextAlignment(.center)
-            .padding(.horizontal, 36.0)
-            .padding(.vertical, 8.0)
+            .padding(.vertical, 6.0)
     }
 }
 
