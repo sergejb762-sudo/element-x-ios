@@ -43,7 +43,7 @@ struct RoomScreenViewState: BindableState {
     // This is used to control the banner
     var pinnedEventsBannerState: PinnedEventsBannerState = .loading(numbersOfEvents: 0)
     var shouldShowPinnedEventsBanner: Bool {
-        !pinnedEventsBannerState.isEmpty && lastScrollDirection != .top
+        !pinnedEventsBannerState.isEmpty  // Flox: always show pinned banner (Telegram-style)
     }
     
     var canSendMessage = true
