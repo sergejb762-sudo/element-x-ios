@@ -20,7 +20,7 @@ enum UserSessionFlowCoordinatorAction {
 }
 
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
-    enum HomeTab: Hashable { case chats, spaces }
+    enum HomeTab: Hashable { case contacts, calls, chats, settings }
     
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationTabCoordinator: NavigationTabCoordinator<HomeTab>
@@ -35,8 +35,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let onboardingStackCoordinator: NavigationStackCoordinator
     private let chatsTabFlowCoordinator: ChatsTabFlowCoordinator
     private let chatsTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
-    private let spacesTabFlowCoordinator: SpacesTabFlowCoordinator
-    private let spacesTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
+    private let contactsTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
+    private let callsTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
+    private let settingsTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
     
     // periphery:ignore - retaining purpose
     private var settingsFlowCoordinator: SettingsFlowCoordinator?
@@ -79,18 +80,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationTabCoordinator = NavigationTabCoordinator()
         navigationRootCoordinator.setRootCoordinator(navigationTabCoordinator)
         
+        // Contacts tab (placeholder)
+        contactsTabDetails = .init(tag: HomeTab.contacts, title: "Contacts", icon: \.userProfile, selectedIcon: \.userProfileSolid)
+
+        // Calls tab (placeholder)
+        callsTabDetails = .init(tag: HomeTab.calls, title: "Calls", icon: \.voiceCallSolid, selectedIcon: \.voiceCallSolid)
+
+        // Chats tab (existing HomeScreen / room list)
         let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.appSettings.hideBrandChrome))
         chatsTabFlowCoordinator = ChatsTabFlowCoordinator(isNewLogin: isNewLogin,
                                                           navigationSplitCoordinator: chatsSplitCoordinator,
                                                           flowParameters: flowParameters)
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
         chatsTabDetails.navigationSplitCoordinator = chatsSplitCoordinator
-        
-        let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.appSettings.hideBrandChrome))
-        spacesTabFlowCoordinator = SpacesTabFlowCoordinator(navigationSplitCoordinator: spacesSplitCoordinator,
-                                                            flowParameters: flowParameters)
-        spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
-        spacesTabDetails.navigationSplitCoordinator = spacesSplitCoordinator
+
+        // Settings tab (placeholder)
+        settingsTabDetails = .init(tag: HomeTab.settings, title: L10n.commonSettings, icon: \.settings, selectedIcon: \.settings)
         
         onboardingStackCoordinator = NavigationStackCoordinator()
         onboardingFlowCoordinator = OnboardingFlowCoordinator(isNewLogin: isNewLogin,
@@ -98,11 +103,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                               navigationStackCoordinator: onboardingStackCoordinator,
                                                               flowParameters: flowParameters)
         
+        let contactsCoordinator = FloxPlaceholderTabCoordinator(title: "Contacts", icon: \.userProfile)
+        let callsCoordinator = FloxPlaceholderTabCoordinator(title: "Calls", icon: \.voiceCallSolid)
+        let settingsCoordinator = FloxPlaceholderTabCoordinator(title: L10n.commonSettings, icon: \.settings)
+
         navigationTabCoordinator.setTabs([
+            .init(coordinator: contactsCoordinator, details: contactsTabDetails),
+            .init(coordinator: callsCoordinator, details: callsTabDetails),
             .init(coordinator: chatsSplitCoordinator, details: chatsTabDetails),
-            .init(coordinator: spacesSplitCoordinator, details: spacesTabDetails)
+            .init(coordinator: settingsCoordinator, details: settingsTabDetails)
         ])
-        
+        // Default to Chats tab (Telegram-style)
+        navigationTabCoordinator.selectedTab = .chats
+
         stateMachine = flowParameters.stateMachineFactory.makeUserSessionFlowStateMachine(state: .initial)
         configureStateMachine()
         
@@ -116,7 +129,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     func stop() {
         chatsTabFlowCoordinator.stop()
     }
-    
+
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch appRoute {
         case .accountProvisioningLink:
@@ -172,9 +185,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func configureStateMachine() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .tabBar]) { [weak self] _ in
             guard let self else { return }
-            
+
             chatsTabFlowCoordinator.start()
-            spacesTabFlowCoordinator.start()
             attemptStartingOnboarding()
         }
         
@@ -209,20 +221,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     hideCallScreenOverlay()
                 case .logout:
                     Task { await self.runLogoutFlow() }
-                }
-            }
-            .store(in: &cancellables)
-        
-        spacesTabFlowCoordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .presentCallScreen(let roomProxy):
-                    presentCallScreen(roomProxy: roomProxy)
-                case .verifyUser(let userID):
-                    presentSessionVerificationScreen(flow: .userInitiator(userID: userID))
-                case .showSettings:
-                    stateMachine.tryEvent(.showSettingsScreen)
                 }
             }
             .store(in: &cancellables)

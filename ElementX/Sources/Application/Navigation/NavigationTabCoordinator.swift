@@ -309,6 +309,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
                     .toolbar(module.details.barVisibility(in: horizontalSizeClass), for: .tabBar)
             }
         }
+        .tint(.compound.iconAccentPrimary)
         .backportTabBarMinimizeBehaviorOnScrollDown()
         .introspect(.tabView, on: .supportedVersions, customize: configureAppearance)
         .sheet(item: $navigationTabCoordinator.sheetModule) { module in
@@ -335,9 +336,24 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     
     private func configureAppearance(_ tabBarController: UITabBarController) {
         standardAppearance.configureWithDefaultBackground()
+        standardAppearance.backgroundColor = .compound.bgCanvasDefault
+        standardAppearance.shadowColor = .separator // Thin separator line at top
+
+        // Badge colors
         standardAppearance.stackedLayoutAppearance.normal.badgeBackgroundColor = .compound.iconAccentPrimary // iPhone Portrait
         standardAppearance.compactInlineLayoutAppearance.normal.badgeBackgroundColor = .compound.iconAccentPrimary // iPhone Landscape
         standardAppearance.inlineLayoutAppearance.normal.badgeBackgroundColor = .compound.iconAccentPrimary // iPadOS 17 (doesn't work for 18+)
+
+        // Unselected icon/title color (gray)
+        let normalColor = UIColor.compound.iconSecondary
+        for layoutAppearance in [standardAppearance.stackedLayoutAppearance,
+                                 standardAppearance.compactInlineLayoutAppearance,
+                                 standardAppearance.inlineLayoutAppearance] {
+            layoutAppearance.normal.iconColor = normalColor
+            layoutAppearance.normal.titleTextAttributes = [.foregroundColor: normalColor]
+        }
+
         tabBarController.tabBar.standardAppearance = standardAppearance
+        tabBarController.tabBar.tintColor = .compound.iconAccentPrimary
     }
 }

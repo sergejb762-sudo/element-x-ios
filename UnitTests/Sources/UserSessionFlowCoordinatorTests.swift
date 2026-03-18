@@ -27,7 +27,8 @@ struct UserSessionFlowCoordinatorTests {
     }
     
     private var chatsSplitCoordinator: NavigationSplitCoordinator? {
-        tabCoordinator?.tabCoordinators.first as? NavigationSplitCoordinator
+        // Chats tab is the 3rd tab (index 2) after Contacts and Calls
+        tabCoordinator?.tabCoordinators.dropFirst(2).first as? NavigationSplitCoordinator
     }
     
     private var detailCoordinator: CoordinatorProtocol? {

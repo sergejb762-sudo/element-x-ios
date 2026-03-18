@@ -178,6 +178,7 @@
 		1B5B30839656AE2F957C6B1E /* test_pdf.pdf in Resources */ = {isa = PBXBuildFile; fileRef = BE98688578F8B0541D853695 /* test_pdf.pdf */; };
 		1B88BB631F7FC45A213BB554 /* TimelineItemSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AEEF8142DF1B59DB40FB93 /* TimelineItemSender.swift */; };
 		1BA04D05EBC6646958B1BE60 /* PlaceholderScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF34A2FD6797535C95AC918D /* PlaceholderScreenCoordinator.swift */; };
+		F8B362581315F813BB0228B2 /* FloxPlaceholderTabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5E4ADB7F71D57255C04CD3 /* FloxPlaceholderTabCoordinator.swift */; };
 		1BEADA694AC53ABB8B459F9A /* LeaveSpaceRoomDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3797A2325BE44FFB478BE9 /* LeaveSpaceRoomDetailsCell.swift */; };
 		1C1750C009F7214B967928BC /* ManageRoomMemberSheetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80807B554CF9C524F98674F /* ManageRoomMemberSheetViewModelTests.swift */; };
 		1C20A21FB0E11A933CBB2F43 /* ManageAuthorizedSpacesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B707676F9EB213653DF91854 /* ManageAuthorizedSpacesScreen.swift */; };
@@ -2938,6 +2939,7 @@
 		FBB0328F2887BF0A65BC5D49 /* NotificationSettingsEditScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsEditScreen.swift; sourceTree = "<group>"; };
 		FBC776F301D374A3298C69DA /* AppCoordinatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinatorProtocol.swift; sourceTree = "<group>"; };
 		FC3797A2325BE44FFB478BE9 /* LeaveSpaceRoomDetailsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaveSpaceRoomDetailsCell.swift; sourceTree = "<group>"; };
+		FC5E4ADB7F71D57255C04CD3 /* FloxPlaceholderTabCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloxPlaceholderTabCoordinator.swift; sourceTree = "<group>"; };
 		FC83F47D2173B7538AA72E0E /* RoomSummaryProviderMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryProviderMock.swift; sourceTree = "<group>"; };
 		FC9044BE0E4A66F5B963E834 /* AudioFileEventsTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileEventsTimelineView.swift; sourceTree = "<group>"; };
 		FCE93F0CBF0D96B77111C413 /* AppLockFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockFlowCoordinator.swift; sourceTree = "<group>"; };
@@ -5690,6 +5692,7 @@
 		A448A3A8F764174C60CD0CA1 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				FC5E4ADB7F71D57255C04CD3 /* FloxPlaceholderTabCoordinator.swift */,
 				BF34A2FD6797535C95AC918D /* PlaceholderScreenCoordinator.swift */,
 				854BCEAF2A832176FAACD2CB /* SplashScreenCoordinator.swift */,
 			);
@@ -8157,6 +8160,7 @@
 				37D789F24199B32E3FD1AA7B /* FileRoomTimelineItemContent.swift in Sources */,
 				64EE9D2CF7AD02EE53983CE1 /* FileRoomTimelineView.swift in Sources */,
 				F5D2270B5021D521C0D22E11 /* FlowCoordinatorProtocol.swift in Sources */,
+				F8B362581315F813BB0228B2 /* FloxPlaceholderTabCoordinator.swift in Sources */,
 				18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */,
 				4D0F4385B7DDB68C66C78857 /* FormattedBodyText.swift in Sources */,
 				7807B1DEE32617896886A8E5 /* FormattingToolbar.swift in Sources */,
