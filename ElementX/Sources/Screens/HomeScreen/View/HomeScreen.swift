@@ -85,15 +85,8 @@ struct HomeScreen: View {
         Button {
             context.send(viewAction: .showSettings)
         } label: {
-            LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                name: context.viewState.userDisplayName,
-                                contentID: context.viewState.userID,
-                                avatarSize: .user(on: .chats),
-                                mediaProvider: context.mediaProvider)
-                .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
-                .clipShape(.circle)
-                .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
-                .compositingGroup()
+            // Flox: use hamburger menu icon instead of user avatar (Telegram-style)
+            CompoundIcon(\.menu)
         }
         .accessibilityLabel(L10n.commonSettings)
     }
