@@ -65,14 +65,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 guard let self else { return }
                 
                 switch securityState.recoveryState {
-                case .disabled:
-                    state.requiresExtraAccountSetup = true
-                    if !state.securityBannerMode.isDismissed {
-                        state.securityBannerMode = .show(.setUpRecovery)
-                    }
-                case .incomplete:
-                    state.requiresExtraAccountSetup = true
-                    state.securityBannerMode = .show(.recoveryOutOfSync)
+                case .disabled, .incomplete:
+                    // Flox: hide recovery banner — don't distract users
+                    state.securityBannerMode = .none
+                    state.requiresExtraAccountSetup = false
                 default:
                     state.securityBannerMode = .none
                     state.requiresExtraAccountSetup = false
