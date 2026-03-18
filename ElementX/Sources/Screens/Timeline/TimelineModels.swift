@@ -166,6 +166,9 @@ struct TimelineViewStateBindings {
 
     var showTranslation = false
     var textToBeTranslated: String?
+
+    var showSelectText = false
+    var textToBeSelected: String?
 }
 
 struct TimelineItemActionMenuInfo: Equatable, Identifiable {

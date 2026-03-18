@@ -63,6 +63,11 @@ struct TimelineView: View {
                     timelineContext.textToBeTranslated = nil
                 }
             }
+            .sheet(isPresented: $timelineContext.showSelectText) {
+                timelineContext.textToBeSelected = nil
+            } content: {
+                SelectTextView(text: timelineContext.textToBeSelected ?? "")
+            }
             .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
                 let supportedProviders = providers.filter(\.isSupportedForPasteOrDrop)
                 

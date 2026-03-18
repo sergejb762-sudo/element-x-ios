@@ -27,6 +27,7 @@ enum TimelineInteractionHandlerAction {
     case viewInRoomTimeline(eventID: String)
     case displayThread(itemID: TimelineItemIdentifier)
     case showTranslation(text: String)
+    case showSelectText(text: String)
 }
 
 /// The interaction handler groups logic for dealing with various actions the user can take on a timeline's
@@ -202,6 +203,9 @@ class TimelineInteractionHandler {
         case .translate:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
             actionsSubject.send(.showTranslation(text: messageTimelineItem.body))
+        case .selectText:
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
+            actionsSubject.send(.showSelectText(text: messageTimelineItem.body))
         }
         
         if action.switchToDefaultComposer {

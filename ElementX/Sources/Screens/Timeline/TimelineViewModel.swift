@@ -511,6 +511,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .showTranslation(let text):
                     self.state.bindings.textToBeTranslated = text
                     self.state.bindings.showTranslation = true
+                case .showSelectText(let text):
+                    self.state.bindings.textToBeSelected = text
+                    self.state.bindings.showSelectText = true
                 }
             }
             .store(in: &cancellables)
